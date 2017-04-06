@@ -11,7 +11,6 @@ function linearIndexToSquareIndex(linearIndex) {
   var rowIndex = Math.floor(linearIndex/3);
   return [rowIndex, colIndex]
 }
-console.log(linearIndexToSquareIndex(5))
 
 
 // winning conditions
@@ -62,41 +61,74 @@ function checkWin(board) {
   }
 }
 
-// console.log(checkWin([[0,1,"X"], [3,"X",5], ["X",7,8]]))
-var scores = [[0,0,0],
-              [0,0,0],
-              [0,0,0]];
-
-function minimax(board) {
-  debugger
-  var moves = [];
-  for (var i = 0; i < 3; i++) {
-    for (var j = 0; j < 3; j++) {
-      if (board[i][j] === 0) {
-        moves.push([i,j])
-      }
+// function getAvailableMoves(board) {
+//   var moves = []; // create moves array
+//   for (var i = 0; i < 3; i++) {
+//     for (var j = 0; j < 3; j++) {
+//       if (board[i][j] === 0) {
+//         moves.push([i,j])
+//       }
+//     }
+//   }
+//   return moves
+// }
+//
+// function populateScoresArray(moves, board, playerSymbol) {
+//   for (var k = 0; k < moves.length; k++) {
+//     board = getNewState(moves[k],board, playerSymbol)
+//     if(checkWin(board)){
+//       scores[moves[k][0]][moves[k][1]] += 1;
+//     }
+//     else if(checkWin(board) === false){
+//       scores[moves[k][0]][moves[k][1]] -= 1;
+//     }
+//     else{
+//       minimax(board); //is this right?
+//     }
+//   } //it says to push the move into the moves array, but it should already be there. Similarly, the scores is a bit messy, because the scores array isn't keeping track of the scores at each move.
+// }
+//
+// function getNewState (move, board, playerSymbol) {
+//   board = board.slice();
+//   board[move[0]][move[1]] = playerSymbol;
+// }
+//
+function maxCalculation (scores, moves) {
+  movesWithScores = []
+  for (var i = 0; i < moves.length; i++) {
+    if (scores[moves[i][0]][moves[i][1]]) {
+      movesWithScores.push([moves[i][0], moves[i][1], scores[moves[i][0]][moves[i][1]]])
     }
   }
+  var maxVal = Math.max.apply(Math, movesWithScores[2])
+  var maxIndex = movesWithScores[2].indexOf(maxVal)
 
-  for (var k = 0; k < moves.length; k++) {
-    var localBoard = board.slice();
-    localBoard[moves[k][0]][moves[k][1]] = 'X';
-    if(checkWin(localBoard)){
-      scores[moves[k][0]][moves[k][1]] += 1;
-    }
-    else if(checkWin(localBoard) === false){
-      scores[moves[k][0]][moves[k][1]] -= 1;
-    }
-    else{
-      minimax(localBoard);
-    }
-  }
-  return scores
 }
+//
+//
+//
+//
+//
+// function minimax(board) {
+//   var scores = [[0,0,0],
+//                 [0,0,0],
+//                 [0,0,0]];
+//
+//   var moves = getAvailableMoves(board)
+//   populateScoresArray(moves, board, playerSymbol)
+//
+//   if (playerSymbol === "X") {
+//     scores = maxCalculation(scores, moves)
+//   }
+//
+//
+//
+//
+// }
 
-console.log(minimax([[0,"O","O"],
-                     ["O","O","X"],
-                     ["X","X",0]]));
+// console.log(minimax([[0,"O","O"],
+//                      ["O","O","X"],
+//                      ["X","X",0]]));
 
 $(document).ready(function() {
   $("form").submit(function(event) {
